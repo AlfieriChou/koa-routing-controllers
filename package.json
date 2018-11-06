@@ -1,0 +1,38 @@
+{
+  "name": "koa-routing-controllers",
+  "version": "1.0.0",
+  "description": "koa routing controllers",
+  "scripts": {
+    "dev": "ts-node-dev src/server.ts",
+    "start": "ts-node src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlfieriChou/koa-routing-controllers.git"
+  },
+  "keywords": [
+    "koa"
+  ],
+  "author": "AlfieriChou",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlfieriChou/koa-routing-controllers/issues"
+  },
+  "homepage": "https://github.com/AlfieriChou/koa-routing-controllers#readme",
+  "dependencies": {
+    "@types/koa": "^2.0.46",
+    "@types/koa-bodyparser": "^5.0.1",
+    "@types/koa-router": "^7.0.33",
+    "koa": "^2.6.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-multer": "^1.0.2",
+    "koa-router": "^7.4.0",
+    "reflect-metadata": "^0.1.12",
+    "routing-controllers": "^0.7.7"
+  },
+  "devDependencies": {
+    "ts-node": "^7.0.1",
+    "ts-node-dev": "^1.0.0-pre.30",
+    "typescript": "^3.1.6"
+  }
+}
