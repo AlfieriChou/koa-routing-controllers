@@ -26,34 +26,35 @@ export class DemoController {
 
   @Get('/demos/:id')
   async show(@Param('id') id: number, ctx: Context) {
-    const postRepository = getManager().createQueryBuilder(Demo, 'demo')
-  const post = await postRepository.where({ id: id })
-  if (!post) ctx.throw('该信息不存在', 404)
-  return post
+    const demoRepository = getManager().getRepository(Demo)
+    const demo = await demoRepository.findOne({ id: id })
+    if (!demo) ctx.throw('该信息不存在', 404)
+    return demo
   }
 
   @Post('/demos')
   async create(@Body() demo: any) {
-    const postRepository = getManager().createQueryBuilder(Demo, 'demo')
-    const result = await postRepository.insert().into(Demo).values(demo).execute()
+    const demoRepository = getManager().getRepository(Demo)
+    const newDemo = await demoRepository.create(demo)
+    const result = await demoRepository.save(newDemo)
     return result
   }
 
   @Put('/demos/:id')
   async update(@Param('id') id: number, @Body() demo: any, ctx: Context) {
-    const postRepository = getManager().createQueryBuilder(Demo, 'demo')
-    const exists = await postRepository.where({ id: id })
+    const demoRepository = getManager().createQueryBuilder(Demo, 'demo')
+    const exists = await demoRepository.where({ id: id })
     if (!exists) ctx.throw('该信息不存在', 404)
-    const result = await postRepository.update(Demo).set(demo).where('id = :id', { id: id }).execute()
+    const result = await demoRepository.update(Demo).set(demo).where('id = :id', { id: id }).execute()
     return result
   }
 
   @Delete('/demos/:id')
   async remove(@Param('id') id: number, ctx: Context) {
-    const postRepository = getManager().createQueryBuilder(Demo, 'demo')
-    const exists = await postRepository.where({ id: id })
+    const demoRepository = getManager().createQueryBuilder(Demo, 'demo')
+    const exists = await demoRepository.where({ id: id })
     if (!exists) ctx.throw('该信息不存在', 404)
-    const result = await postRepository.delete().from(Demo).where('id = :id', { id: id }).execute()
+    const result = await demoRepository.delete().from(Demo).where('id = :id', { id: id }).execute()
     return result
   }
 }
