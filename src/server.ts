@@ -1,10 +1,30 @@
 import 'reflect-metadata'
-import { createKoaServer } from 'routing-controllers'
-import './middleware/morganDev'
+import { useKoaServer } from 'routing-controllers'
+import * as Koa from 'koa'
+import * as logger from 'koa-logger'
+import * as BodyParser from 'koa-bodyparser'
+import { Context } from 'koa'
 
-const app = createKoaServer({
-  controllers: [__dirname + '/controller/*.ts']
+const app = new Koa()
+
+app.use(async (ctx: Context, next) => {
+  if (ctx.request.method === 'OPTIONS') {
+    ctx.response.status = 200
+  }
+  ctx.response.set({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
+    'Access-Control-Allow-Headers': 'X-PINGOTHER, Content-Type',
+    'Access-Control-Max-Age': '86400000'
+  })
+  await next()
+})
+app.use(BodyParser())
+app.use(logger())
+const server = useKoaServer(app, {
+  controllers: [`${__dirname}/controller/*.ts`]
 })
 
-app.listen(3000)
+server.listen(3000)
 console.log('Koa server is running on port 3000.')
