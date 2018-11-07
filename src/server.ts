@@ -1,10 +1,9 @@
 import 'reflect-metadata'
 import { createKoaServer } from 'routing-controllers'
-import { UserController } from './controller/user'
 import './middleware/morganDev'
 
 const app = createKoaServer({
-  controllers: [UserController]
+  controllers: [__dirname + '/controller/*.ts']
 })
 
 app.listen(3000)
