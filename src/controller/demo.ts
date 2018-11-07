@@ -1,0 +1,59 @@
+import { Controller, Param, QueryParam, Body, Get, Post, Put, Delete } from 'routing-controllers'
+import { Demo } from '../entity/demo'
+import { getManager } from 'typeorm'
+import { Context } from 'koa'
+import { paginate } from '../common/pagination'
+
+@Controller()
+export class DemoController {
+
+  @Get('/demos')
+  async index(@QueryParam('page') page: number, @QueryParam('size') size: number, @QueryParam('pagination') pagination: boolean) {
+    let sql = getManager().createQueryBuilder(Demo, 'demo')
+    if (pagination === true) {
+      const count = await sql.getCount()
+      sql.offset((page - 1) * size).limit(size)
+      const result = await sql.getMany()
+      return {
+        result: result,
+        paginate: paginate({ count, page, size })
+      }
+    }
+    const result = await sql.getMany()
+    return result
+
+  }
+
+  @Get('/demos/:id')
+  async show(@Param('id') id: number, ctx: Context) {
+    const postRepository = getManager().createQueryBuilder(Demo, 'demo')
+  const post = await postRepository.where({ id: id })
+  if (!post) ctx.throw('该信息不存在', 404)
+  return post
+  }
+
+  @Post('/demos')
+  async create(@Body() demo: any) {
+    const postRepository = getManager().createQueryBuilder(Demo, 'demo')
+    const result = await postRepository.insert().into(Demo).values(demo).execute()
+    return result
+  }
+
+  @Put('/demos/:id')
+  async update(@Param('id') id: number, @Body() demo: any, ctx: Context) {
+    const postRepository = getManager().createQueryBuilder(Demo, 'demo')
+    const exists = await postRepository.where({ id: id })
+    if (!exists) ctx.throw('该信息不存在', 404)
+    const result = await postRepository.update(Demo).set(demo).where('id = :id', { id: id }).execute()
+    return result
+  }
+
+  @Delete('/demos/:id')
+  async remove(@Param('id') id: number, ctx: Context) {
+    const postRepository = getManager().createQueryBuilder(Demo, 'demo')
+    const exists = await postRepository.where({ id: id })
+    if (!exists) ctx.throw('该信息不存在', 404)
+    const result = await postRepository.delete().from(Demo).where('id = :id', { id: id }).execute()
+    return result
+  }
+}
