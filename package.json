@@ -4,7 +4,10 @@
   "description": "koa routing controllers",
   "scripts": {
     "dev": "ts-node-dev src/server.ts",
-    "start": "ts-node src/server.ts"
+    "start": "ts-node src/server.ts",
+    "migration:create": "ts-node ./node_modules/.bin/typeorm migration:create -n Migration",
+    "migration:run": "ts-node ./node_modules/.bin/typeorm migration:run",
+    "migration:revert": "ts-node ./node_modules/.bin/typeorm migration:revert"
   },
   "repository": {
     "type": "git",
