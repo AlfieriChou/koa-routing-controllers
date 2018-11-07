@@ -7,3 +7,11 @@ export class StartTimeMiddleware implements KoaMiddlewareInterface {
     next()
   }
 }
+
+@Middleware({ type: 'after' })
+export class EndTimeMiddleware implements KoaMiddlewareInterface {
+  use(ctx: any, next: (err?: any) => Promise<any>): any {
+    console.log('<------- ' + ctx.response.status + ' ' + ctx.request.method + ' ' + ctx.request.url)
+    next()
+  }
+}
