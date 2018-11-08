@@ -3,6 +3,7 @@ import { Demo } from '../entity/demo'
 import { getManager } from 'typeorm'
 import { Context } from 'koa'
 import { paginate } from '../common/pagination'
+import { NotFound } from 'ts-httpexceptions'
 
 @Controller()
 export class DemoController {
@@ -27,10 +28,10 @@ export class DemoController {
   }
 
   @Get('/demos/:id')
-  async show(@Param('id') id: number, @Ctx() ctx: Context) {
+  async show(@Param('id') id: number) {
     const demoRepository = getManager().getRepository(Demo)
     const demo = await demoRepository.findOne({ id: id })
-    if (!demo) ctx.throw('该信息不存在', 404)
+    if (!demo) throw new NotFound('该信息不存在')
     return demo
   }
 
@@ -46,19 +47,19 @@ export class DemoController {
   }
 
   @Put('/demos/:id')
-  async update(@Param('id') id: number, @Body() demo: any, @Ctx() ctx: Context) {
+  async update(@Param('id') id: number, @Body() demo: any) {
     const demoRepository = getManager().createQueryBuilder(Demo, 'demo')
     const exists = await demoRepository.where({ id: id })
-    if (!exists) ctx.throw('该信息不存在', 404)
+    if (!exists) throw new NotFound('该信息不存在')
     const result = await demoRepository.update(Demo).set(demo).where('id = :id', { id: id }).execute()
     return result
   }
 
   @Delete('/demos/:id')
-  async remove(@Param('id') id: number, @Ctx() ctx: Context) {
+  async remove(@Param('id') id: number) {
     const demoRepository = getManager().createQueryBuilder(Demo, 'demo')
     const exists = await demoRepository.where({ id: id })
-    if (!exists) ctx.throw('该信息不存在', 404)
+    if (!exists) throw new NotFound('该信息不存在')
     const result = await demoRepository.delete().from(Demo).where('id = :id', { id: id }).execute()
     return result
   }

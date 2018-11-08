@@ -31,6 +31,8 @@
     "mysql": "^2.16.0",
     "reflect-metadata": "^0.1.12",
     "routing-controllers": "^0.7.7",
+    "ts-httpexceptions": "^3.1.0",
+    "tslib": "^1.9.3",
     "typeorm": "^0.2.8"
   },
   "devDependencies": {
