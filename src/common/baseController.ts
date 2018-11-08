@@ -1,11 +1,10 @@
 import { getManager } from 'typeorm'
-import { Context } from 'koa'
 import { NotFound } from 'ts-httpexceptions'
 
 export class BaseController {
   getSort (options: string) {
     let optionsArr = options.split(',')
-    let sortObj: Object
+    let sortObj: any = {}
     optionsArr.map(item => {
       let field = item.startsWith('-') || item.startsWith('+') ? item.substring(1) : item
       sortObj[field] = item.startsWith('-') ? 'desc' : 'asc'

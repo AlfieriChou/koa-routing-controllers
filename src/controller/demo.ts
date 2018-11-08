@@ -14,6 +14,10 @@ export class DemoController extends BaseController {
     let sql = getManager().createQueryBuilder(Demo, 'demo')
     if (params.id) sql = sql.where('demo.id = :id', { id: params.id })
     if (params.title) sql = sql.where('demo.title like :title', { title: '%' + params.title + '%' })
+    if (params.order) {
+      let order : {} = super.getSort(params.order)
+      sql = sql.orderBy(order)
+    }
     if (pagination === true) {
       const count = await sql.getCount()
       sql.offset((page - 1) * size).limit(size)
