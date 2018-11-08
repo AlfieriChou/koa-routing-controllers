@@ -2,11 +2,11 @@ import { Controller, Ctx, Param, QueryParam, BodyParam, Body, Get, Post, Put, De
 import { Demo } from '../entity/demo'
 import { getManager } from 'typeorm'
 import { Context } from 'koa'
-import { paginate } from '../common/pagination'
+import { BaseController } from '../common/baseController'
 import { NotFound } from 'ts-httpexceptions'
 
 @Controller()
-export class DemoController {
+export class DemoController extends BaseController {
 
   @Get('/demos')
   async index(@QueryParam('page') page: number, @QueryParam('size') size: number, @QueryParam('pagination') pagination: boolean, @Ctx() ctx: Context) {
@@ -20,7 +20,7 @@ export class DemoController {
       const result = await sql.getMany()
       return {
         result: result,
-        paginate: paginate({ count, page, size })
+        paginate: super.paginate({ count, page, size })
       }
     }
     const result = await sql.getMany()
