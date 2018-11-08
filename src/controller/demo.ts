@@ -1,4 +1,4 @@
-import { Controller, Ctx, Param, QueryParam, Body, Get, Post, Put, Delete } from 'routing-controllers'
+import { Controller, Ctx, Param, QueryParam, BodyParam, Body, Get, Post, Put, Delete } from 'routing-controllers'
 import { Demo } from '../entity/demo'
 import { getManager } from 'typeorm'
 import { Context } from 'koa'
@@ -35,9 +35,12 @@ export class DemoController {
   }
 
   @Post('/demos')
-  async create(@Body() demo: any) {
+  async create(@BodyParam('title', { required: true }) title: string, @BodyParam('text') text: string) {
     const demoRepository = getManager().getRepository(Demo)
-    const newDemo = await demoRepository.create(demo)
+    const newDemo = await demoRepository.create({
+      title: title,
+      text: text || ''
+    })
     const result = await demoRepository.save(newDemo)
     return result
   }
