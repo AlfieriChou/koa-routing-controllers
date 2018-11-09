@@ -1,6 +1,5 @@
 import { getManager } from 'typeorm'
 import { NotFound } from 'ts-httpexceptions'
-import * as moment from 'moment'
 
 export class BaseController {
   getSort (options: string) {
@@ -14,7 +13,12 @@ export class BaseController {
   }
   getDateDuration(start?: Date, end?: Date) {
     start = new Date(start)
-    end = new Date(end)
+    if (!end) {
+      end = new Date(start)
+      end.setDate(start.getDate() + 1)
+    } else {
+      end = new Date(end)
+    }
     return {
       startDate: start,
       endDate: end
