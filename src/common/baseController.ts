@@ -1,5 +1,6 @@
 import { getManager } from 'typeorm'
 import { NotFound } from 'ts-httpexceptions'
+import * as moment from 'moment'
 
 export class BaseController {
   getSort (options: string) {
@@ -10,6 +11,14 @@ export class BaseController {
       sortObj[field] = item.startsWith('-') ? 'desc' : 'asc'
     })
     return sortObj
+  }
+  getDateDuration(start?: Date, end?: Date) {
+    start = new Date(start)
+    end = new Date(end)
+    return {
+      startDate: start,
+      endDate: end
+    }
   }
   paginate ({ count, page, size }) {
     return {

@@ -14,6 +14,7 @@ export class DemoController extends BaseController {
     let sql = getManager().createQueryBuilder(Demo, 'demo')
     if (params.id) sql = sql.where('demo.id = :id', { id: params.id })
     if (params.title) sql = sql.where('demo.title like :title', { title: '%' + params.title + '%' })
+    if (params.created_at_start) sql = sql.andWhere('created_at BETWEEN :startDate AND :endDate', super.getDateDuration(params.created_at_start, params.created_at_end))
     if (params.order) {
       let order : {} = super.getSort(params.order)
       sql = sql.orderBy(order)
