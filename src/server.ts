@@ -5,6 +5,13 @@ import * as Koa from 'koa'
 import * as logger from 'koa-logger'
 import * as BodyParser from 'koa-bodyparser'
 import { Context } from 'koa'
+import * as views from 'koa-views'
+import * as path from 'path'
+
+const routingControllersOptions = {
+  controllers: [`${__dirname}/controller/*.ts`],
+  routePrefix: '/v1'
+}
 
 createConnection().then(async connection => {
   const app = new Koa()
@@ -23,9 +30,8 @@ createConnection().then(async connection => {
   })
   app.use(BodyParser())
   app.use(logger())
-  const server = useKoaServer(app, {
-    controllers: [`${__dirname}/controller/*.ts`]
-  })
+  app.use(views(path.join('./views'), {map: {html: 'nunjucks'}}))
+  const server = useKoaServer(app, routingControllersOptions)
 
   server.listen(3000)
   console.log('Koa server is running on port 3000.')

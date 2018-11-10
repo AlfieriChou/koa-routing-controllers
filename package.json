@@ -23,14 +23,18 @@
   },
   "homepage": "https://github.com/AlfieriChou/koa-routing-controllers#readme",
   "dependencies": {
+    "class-validator-jsonschema": "^1.2.0",
     "koa": "^2.6.1",
     "koa-bodyparser": "^4.2.1",
     "koa-logger": "^3.2.0",
     "koa-multer": "^1.0.2",
     "koa-router": "^7.4.0",
+    "koa-views": "^6.1.4",
     "mysql": "^2.16.0",
+    "nunjucks": "^3.1.4",
     "reflect-metadata": "^0.1.12",
     "routing-controllers": "^0.7.7",
+    "routing-controllers-openapi": "^1.4.2",
     "ts-httpexceptions": "^3.1.0",
     "tslib": "^1.9.3",
     "typeorm": "^0.2.8"
