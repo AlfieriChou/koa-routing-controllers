@@ -1,7 +1,6 @@
-import { Controller, Ctx, Param, QueryParam, BodyParam, Body, Get, Post, Put, Delete } from 'routing-controllers'
+import { Controller, Param, QueryParam, BodyParam, Body, Get, Post, Put, Delete } from 'routing-controllers'
 import { Demo } from '../entity/demo'
 import { getManager } from 'typeorm'
-import { Context } from 'koa'
 import { BaseController } from '../common/baseController'
 import { NotFound } from 'ts-httpexceptions'
 
@@ -12,17 +11,17 @@ export class DemoController extends BaseController {
   async index(
     @QueryParam('id') id: number,
     @QueryParam('title') title: string,
-    // @QueryParam('created_at_start') created_at_start: Date,
-    // @QueryParam('created_at_end') created_at_end: Date,
+    @QueryParam('created_at_start') created_at_start: any,
+    @QueryParam('created_at_end') created_at_end: any,
     @QueryParam('order') order: string,
-    @QueryParam('page') page: number,
-    @QueryParam('size') size: number,
     @QueryParam('pagination') pagination: boolean,
+    @QueryParam('page') page: number,
+    @QueryParam('size') size: number
   ) {
     let sql = getManager().createQueryBuilder(Demo, 'demo')
     if (id) sql = sql.where('demo.id = :id', { id: id })
     if (title) sql = sql.where('demo.title like :title', { title: '%' + title + '%' })
-    // if (created_at_start) sql = sql.andWhere('created_at BETWEEN :startDate AND :endDate', super.getDateDuration(created_at_start, created_at_end))
+    if (created_at_start) sql = sql.andWhere('created_at BETWEEN :startDate AND :endDate', super.getDateDuration(created_at_start, created_at_end))
     if (order) {
       let orderObj : {} = super.getSort(order)
       sql = sql.orderBy(orderObj)
@@ -44,9 +43,7 @@ export class DemoController extends BaseController {
   async show(
     @Param('id') id: number
   ) {
-    const demoRepository = getManager().getRepository(Demo)
-    const demo = await demoRepository.findOne({ id: id })
-    if (!demo) throw new NotFound('该信息不存在')
+    const demo = await super.exists(Demo, { id: id })
     return demo
   }
 
@@ -70,8 +67,7 @@ export class DemoController extends BaseController {
     @Body() demo: any
   ) {
     const demoRepository = getManager().createQueryBuilder(Demo, 'demo')
-    const exists = await demoRepository.where({ id: id })
-    if (!exists) throw new NotFound('该信息不存在')
+    await super.exists(Demo, { id: id })
     const result = await demoRepository.update(Demo).set(demo).where('id = :id', { id: id }).execute()
     return result
   }
@@ -81,8 +77,7 @@ export class DemoController extends BaseController {
     @Param('id') id: number
   ) {
     const demoRepository = getManager().createQueryBuilder(Demo, 'demo')
-    const exists = await demoRepository.where({ id: id })
-    if (!exists) throw new NotFound('该信息不存在')
+    await super.exists(Demo, { id: id })
     const result = await demoRepository.delete().from(Demo).where('id = :id', { id: id }).execute()
     return result
   }
