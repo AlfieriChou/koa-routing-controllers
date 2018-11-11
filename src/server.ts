@@ -7,6 +7,7 @@ import * as BodyParser from 'koa-bodyparser'
 import { Context } from 'koa'
 import * as views from 'koa-views'
 import * as path from 'path'
+import * as Router from 'koa-router'
 
 const routingControllersOptions = {
   controllers: [`${__dirname}/controller/*.ts`],
@@ -15,6 +16,7 @@ const routingControllersOptions = {
 
 createConnection().then(async connection => {
   const app = new Koa()
+  const router = new Router()
   app.use(async (ctx: Context, next) => {
     if (ctx.request.method === 'OPTIONS') {
       ctx.response.status = 200
@@ -31,6 +33,10 @@ createConnection().then(async connection => {
   app.use(BodyParser())
   app.use(logger())
   app.use(views(path.join('./views'), {map: {html: 'nunjucks'}}))
+  router.get('/v1/apidoc', async (ctx) => {
+    await ctx.render('index.html', { url: '/v1/swagger.json' })
+  })
+  app.use(router.routes()).use(router.allowedMethods())
   const server = useKoaServer(app, routingControllersOptions)
 
   server.listen(3000)
