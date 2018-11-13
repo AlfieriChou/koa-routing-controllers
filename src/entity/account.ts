@@ -1,13 +1,16 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { IsString, Length } from 'class-validator'
 
 @Entity()
 export class Account {
   @PrimaryGeneratedColumn()
   id: number
 
+  @Length(2, 32)
   @Column()
   username: string
 
+  @IsString()
   @Column()
   password: string
 
