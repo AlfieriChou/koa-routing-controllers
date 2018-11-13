@@ -2,12 +2,16 @@ import { Controller, Param, QueryParam, BodyParam, Body, Get, Post, Put, Delete 
 import { Demo } from '../entity/demo'
 import { getManager } from 'typeorm'
 import { BaseController } from '../common/baseController'
-import { NotFound } from 'ts-httpexceptions'
+import { OpenAPI, ResponseSchema } from 'routing-controllers-openapi';
 
 @Controller()
 export class DemoController extends BaseController {
 
   @Get('/demos')
+  @OpenAPI({ summary: '获取demo信息列表' })
+  @ResponseSchema(Demo, {
+    isArray: true
+  })
   async index(
     @QueryParam('id') id: number,
     @QueryParam('title') title: string,
@@ -40,6 +44,8 @@ export class DemoController extends BaseController {
   }
 
   @Get('/demos/:id')
+  @OpenAPI({ summary: '获取demo信息列表' })
+  @ResponseSchema(Demo)
   async show(
     @Param('id') id: number
   ) {
@@ -48,20 +54,22 @@ export class DemoController extends BaseController {
   }
 
   @Post('/demos')
+  @OpenAPI({ summary: '创建demo信息' })
+  @ResponseSchema(Demo)
   async create(
-    @BodyParam('title', { required: true }) title: string,
-    @BodyParam('text') text: string
+    @Body({ validate: true }) params: Demo
   ) {
     const demoRepository = getManager().getRepository(Demo)
     const newDemo = await demoRepository.create({
-      title: title,
-      text: text || ''
+      title: params.title,
+      text: params.text
     })
     const result = await demoRepository.save(newDemo)
     return result
   }
 
   @Put('/demos/:id')
+  @OpenAPI({ summary: '更新demo信息' })
   async update(
     @Param('id') id: number,
     @Body() demo: any
@@ -73,6 +81,7 @@ export class DemoController extends BaseController {
   }
 
   @Delete('/demos/:id')
+  @OpenAPI({ summary: '删除demo信息' })
   async remove(
     @Param('id') id: number
   ) {

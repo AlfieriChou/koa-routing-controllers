@@ -1,18 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, Any } from 'typeorm'
-import { Length, IsString } from 'class-validator'
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
 @Entity()
-export class Demo {
+export class Account {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Length(1, 64)
   @Column()
-  title: string
+  username: string
 
-  @IsString()
-  @Column('text')
-  text: string
+  @Column()
+  password: string
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: string
