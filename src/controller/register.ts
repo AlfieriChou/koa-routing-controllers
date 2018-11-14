@@ -13,12 +13,12 @@ export class Register {
     @Body({ required: true }) params: Account
   ) {
     const password: string = await bcrypt.hash(params.password, 10)
-    const accountRepository = getManager().getRepository(Account)
-    const newAccount = await accountRepository.create({
+    const accountRepository: any = getManager().getRepository(Account)
+    const newAccount: any = await accountRepository.create({
       username: params.username,
       password: password
     })
-    const result = await accountRepository.save(newAccount)
+    const result: Object = await accountRepository.save(newAccount)
     return result
   }
 }

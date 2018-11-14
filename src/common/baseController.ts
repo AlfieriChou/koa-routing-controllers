@@ -3,7 +3,7 @@ import { NotFound } from 'ts-httpexceptions'
 
 export class BaseController {
   getSort (options: string) {
-    let optionsArr = options.split(',')
+    const optionsArr: string[] = options.split(',')
     let sortObj: any = {}
     optionsArr.map(item => {
       let field = item.startsWith('-') || item.startsWith('+') ? item.substring(1) : item
@@ -34,7 +34,7 @@ export class BaseController {
   }
   async exists (model: any, options: Object) {
     const demoRepository = getManager().getRepository(model)
-    const exist = await demoRepository.findOne(options)
+    const exist: Object = await demoRepository.findOne(options)
     if (!exist) throw new NotFound('该信息不存在')
     return exist
   }

@@ -31,15 +31,15 @@ export class DemoController extends BaseController {
       sql = sql.orderBy(orderObj)
     }
     if (pagination === true) {
-      const count = await sql.getCount()
+      const count: number = await sql.getCount()
       sql.offset((page - 1) * size).limit(size)
-      const result = await sql.getMany()
+      const result: Object[] = await sql.getMany()
       return {
         result: result,
         paginate: super.paginate({ count, page, size })
       }
     }
-    const result = await sql.getMany()
+    const result: Object[] = await sql.getMany()
     return result
   }
 
@@ -49,7 +49,7 @@ export class DemoController extends BaseController {
   async show(
     @Param('id') id: number
   ) {
-    const demo = await super.exists(Demo, { id: id })
+    const demo: Object = await super.exists(Demo, { id: id })
     return demo
   }
 
@@ -59,12 +59,12 @@ export class DemoController extends BaseController {
   async create(
     @Body({ validate: true }) params: Demo
   ) {
-    const demoRepository = getManager().getRepository(Demo)
-    const newDemo = await demoRepository.create({
+    const demoRepository: any = getManager().getRepository(Demo)
+    const newDemo: any = await demoRepository.create({
       title: params.title,
       text: params.text
     })
-    const result = await demoRepository.save(newDemo)
+    const result: Object = await demoRepository.save(newDemo)
     return result
   }
 
@@ -74,9 +74,9 @@ export class DemoController extends BaseController {
     @Param('id') id: number,
     @Body() demo: any
   ) {
-    const demoRepository = getManager().createQueryBuilder(Demo, 'demo')
+    const demoRepository: any = getManager().createQueryBuilder(Demo, 'demo')
     await super.exists(Demo, { id: id })
-    const result = await demoRepository.update(Demo).set((<Object>demo)).where('id = :id', { id: id }).execute()
+    const result: any = await demoRepository.update(Demo).set((<Object>demo)).where('id = :id', { id: id }).execute()
     return result
   }
 
@@ -85,9 +85,9 @@ export class DemoController extends BaseController {
   async remove(
     @Param('id') id: number
   ) {
-    const demoRepository = getManager().createQueryBuilder(Demo, 'demo')
+    const demoRepository: any = getManager().createQueryBuilder(Demo, 'demo')
     await super.exists(Demo, { id: id })
-    const result = await demoRepository.delete().from(Demo).where('id = :id', { id: id }).execute()
+    const result: any = await demoRepository.delete().from(Demo).where('id = :id', { id: id }).execute()
     return result
   }
 }

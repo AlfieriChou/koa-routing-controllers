@@ -45,7 +45,7 @@ export class AccountController extends BaseController {
   ) {
     const user: any = await super.exists('Account', { username: params.username })
     if (bcrypt.compare(params.password, user.password)) {
-      const result = this.createToken((<Object>user))
+      const result: string = this.createToken((<Object>user))
       return {
         token: result
       }
