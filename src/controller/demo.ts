@@ -25,7 +25,7 @@ export class DemoController extends BaseController {
     let sql = getManager().createQueryBuilder(Demo, 'demo')
     if (id) sql = sql.where('demo.id = :id', { id: id })
     if (title) sql = sql.where('demo.title like :title', { title: '%' + title + '%' })
-    if (created_at_start) sql = sql.andWhere('created_at BETWEEN :startDate AND :endDate', super.getDateDuration(created_at_start, created_at_end))
+    if (created_at_start) sql = sql.andWhere('created_at BETWEEN :startDate AND :endDate', super.getDateDuration((<Date>created_at_start), (<Date>created_at_end)))
     if (order) {
       let orderObj : {} = super.getSort(order)
       sql = sql.orderBy(orderObj)
@@ -76,7 +76,7 @@ export class DemoController extends BaseController {
   ) {
     const demoRepository = getManager().createQueryBuilder(Demo, 'demo')
     await super.exists(Demo, { id: id })
-    const result = await demoRepository.update(Demo).set(demo).where('id = :id', { id: id }).execute()
+    const result = await demoRepository.update(Demo).set((<Object>demo)).where('id = :id', { id: id }).execute()
     return result
   }
 

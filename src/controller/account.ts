@@ -23,7 +23,7 @@ export class AccountController extends BaseController {
     end.setDate(end.getDate() + 1)
     let timeStamp: number = Date.parse(end.toString())
     return jwt.sign({
-      sub: {user},
+      sub: (<Object>user),
       exp: timeStamp
     }, 'koa-routing')
   }
@@ -45,7 +45,7 @@ export class AccountController extends BaseController {
   ) {
     const user: any = await super.exists('Account', { username: params.username })
     if (bcrypt.compare(params.password, user.password)) {
-      const result = this.createToken(user)
+      const result = this.createToken((<Object>user))
       return {
         token: result
       }

@@ -9,7 +9,7 @@ export class BaseController {
       let field = item.startsWith('-') || item.startsWith('+') ? item.substring(1) : item
       sortObj[field] = item.startsWith('-') ? 'desc' : 'asc'
     })
-    return sortObj
+    return (<Object>sortObj)
   }
   getDateDuration(start?: Date, end?: Date) {
     start = new Date(start)
