@@ -3,13 +3,13 @@ import { OpenAPI, ResponseSchema } from 'routing-controllers-openapi'
 import { Account } from '../entity/account'
 import { getManager } from 'typeorm'
 import { BaseController } from '../common/baseController'
-import { IsString } from 'class-validator'
+import { IsString, Length } from 'class-validator'
 
 class LoginSchema {
   @IsString()
   username: string
 
-  @IsString()
+  @Length(6, 30)
   password: string
 }
 
@@ -27,7 +27,9 @@ export class AccountController extends BaseController {
   @Post('/login')
   @OpenAPI({ summary: '账号登录' })
   @ResponseSchema(Account)
-  async login (@Body({ required: true }) params: LoginSchema) {
+  async login (
+    @Body({ required: true }) params: LoginSchema
+  ) {
     return params
   }
 }

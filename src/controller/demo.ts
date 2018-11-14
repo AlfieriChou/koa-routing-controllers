@@ -1,4 +1,4 @@
-import { Controller, Param, QueryParam, BodyParam, Body, Get, Post, Put, Delete } from 'routing-controllers'
+import { Controller, Param, QueryParam, Body, Get, Post, Put, Delete } from 'routing-controllers'
 import { Demo } from '../entity/demo'
 import { getManager } from 'typeorm'
 import { BaseController } from '../common/baseController'

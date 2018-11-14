@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/AlfieriChou/koa-routing-controllers#readme",
   "dependencies": {
+    "bcrypt": "^3.0.2",
     "class-validator-jsonschema": "^1.2.0",
     "koa": "^2.6.1",
     "koa-bodyparser": "^4.2.1",
