@@ -2,7 +2,7 @@ import { Controller, Param, QueryParam, Body, Get, Post, Put, Delete } from 'rou
 import { Demo } from '../entity/demo'
 import { getManager } from 'typeorm'
 import { BaseController } from '../common/baseController'
-import { OpenAPI, ResponseSchema } from 'routing-controllers-openapi';
+import { OpenAPI, ResponseSchema } from 'routing-controllers-openapi'
 
 @Controller()
 export class DemoController extends BaseController {
@@ -27,7 +27,7 @@ export class DemoController extends BaseController {
     if (title) sql = sql.where('demo.title like :title', { title: '%' + title + '%' })
     if (created_at_start) sql = sql.andWhere('created_at BETWEEN :startDate AND :endDate', super.getDateDuration((<Date>created_at_start), (<Date>created_at_end)))
     if (order) {
-      let orderObj : {} = super.getSort(order)
+      let orderObj : {} = await super.getSort(order)
       sql = sql.orderBy(orderObj)
     }
     if (pagination === true) {

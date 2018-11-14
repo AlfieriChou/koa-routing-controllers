@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from 'routing-controllers'
+import { Controller, Get, Post, Body, HeaderParam } from 'routing-controllers'
 import { OpenAPI, ResponseSchema } from 'routing-controllers-openapi'
 import { Account } from '../entity/account'
 import { getManager } from 'typeorm'
@@ -20,7 +20,7 @@ export class AccountController extends BaseController {
 
   private createToken (user: any) {
     let end: Date = new Date()
-    end.setDate(end.getDate() + 1)
+    end.setDate(end.getDate() + 30)
     let timeStamp: number = Date.parse(end.toString())
     return jwt.sign({
       sub: (<Object>user),
@@ -52,5 +52,14 @@ export class AccountController extends BaseController {
     } else {
       return '登录失败'
     }
+  }
+  @Get('/auth')
+  @OpenAPI({ summary: 'auth' })
+  @ResponseSchema(Account)
+  async auth (
+    @HeaderParam('authorization') token: string
+  ) {
+    const user: any = await jwt.verify(token, 'koa-routing')
+    return user
   }
 }
