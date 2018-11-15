@@ -2,7 +2,7 @@ import { getManager } from 'typeorm'
 import { NotFound } from 'ts-httpexceptions'
 
 export class BaseController {
-  getSort (options: string) {
+  public getSort (options: string): Object {
     const optionsArr: string[] = options.split(',')
     let sortObj: any = {}
     optionsArr.map(item => {
@@ -11,7 +11,7 @@ export class BaseController {
     })
     return (<Object>sortObj)
   }
-  getDateDuration(start?: Date, end?: Date) {
+  public getDateDuration(start?: Date, end?: Date): Object {
     start = new Date(start)
     if (!end) {
       end = new Date(start)
@@ -24,7 +24,7 @@ export class BaseController {
       endDate: end
     }
   }
-  paginate ({ count, page, size }) {
+  public paginate ({ count, page, size }): Object {
     return {
       page: +page,
       size: +size,
@@ -32,10 +32,10 @@ export class BaseController {
       page_count: Math.ceil(count / size)
     }
   }
-  async exists (model: any, options: Object) {
+  public async exists (model: any, options: Object): Promise<Object> {
     const demoRepository = getManager().getRepository(model)
-    const exist: Object = await demoRepository.findOne(options)
+    const exist: any = await demoRepository.findOne(options)
     if (!exist) throw new NotFound('该信息不存在')
-    return exist
+    return (<Object>exist)
   }
 }

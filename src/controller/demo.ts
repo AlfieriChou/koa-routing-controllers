@@ -21,7 +21,7 @@ export class DemoController extends BaseController {
     @QueryParam('pagination') pagination: boolean,
     @QueryParam('page') page: number,
     @QueryParam('size') size: number
-  ) {
+  ): Promise<any> {
     let sql = getManager().createQueryBuilder(Demo, 'demo')
     if (id) sql = sql.where('demo.id = :id', { id: id })
     if (title) sql = sql.where('demo.title like :title', { title: '%' + title + '%' })
@@ -48,7 +48,7 @@ export class DemoController extends BaseController {
   @ResponseSchema(Demo)
   public async show(
     @Param('id') id: number
-  ) {
+  ): Promise<Object> {
     const demo: Object = await super.exists(Demo, { id: id })
     return demo
   }
@@ -58,7 +58,7 @@ export class DemoController extends BaseController {
   @ResponseSchema(Demo)
   public async create(
     @Body({ validate: true }) params: Demo
-  ) {
+  ): Promise<Object> {
     const demoRepository: any = getManager().getRepository(Demo)
     const newDemo: any = await demoRepository.create({
       title: params.title,
@@ -73,7 +73,7 @@ export class DemoController extends BaseController {
   public async update(
     @Param('id') id: number,
     @Body() demo: any
-  ) {
+  ): Promise<Object> {
     const demoRepository: any = getManager().createQueryBuilder(Demo, 'demo')
     await super.exists(Demo, { id: id })
     const result: any = await demoRepository.update(Demo).set((<Object>demo)).where('id = :id', { id: id }).execute()
@@ -84,7 +84,7 @@ export class DemoController extends BaseController {
   @OpenAPI({ summary: '删除demo信息' })
   public async remove(
     @Param('id') id: number
-  ) {
+  ): Promise<Object> {
     const demoRepository: any = getManager().createQueryBuilder(Demo, 'demo')
     await super.exists(Demo, { id: id })
     const result: any = await demoRepository.delete().from(Demo).where('id = :id', { id: id }).execute()

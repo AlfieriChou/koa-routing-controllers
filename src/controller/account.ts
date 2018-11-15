@@ -18,10 +18,10 @@ class LoginSchema {
 @Controller()
 export class AccountController extends BaseController {
 
-  private createToken (user: any) {
-    let end: Date = new Date()
-    end.setDate(end.getDate() + 30)
-    let timeStamp: number = Date.parse(end.toString())
+  private createToken (user: any): Promise<string> {
+    let created_at: Date = new Date()
+    created_at.setDate(created_at.getDate() + 30)
+    let timeStamp: number = Date.parse(created_at.toString())
     return jwt.sign({
       sub: (<Object>user),
       exp: timeStamp
@@ -33,7 +33,7 @@ export class AccountController extends BaseController {
   @ResponseSchema(Account, {
     isArray: true
   })
-  public async index () {
+  public async index (): Promise<any> {
     return 'Hello World'
   }
 
@@ -42,10 +42,10 @@ export class AccountController extends BaseController {
   @ResponseSchema(Account)
   public async login (
     @Body({ required: true }) params: LoginSchema
-  ) {
+  ): Promise<Object> {
     const user: any = await super.exists('Account', { username: params.username })
     if (bcrypt.compare(params.password, user.password)) {
-      const result: string = this.createToken((<Object>user))
+      const result = this.createToken((<Object>user))
       return {
         token: result
       }
@@ -58,7 +58,7 @@ export class AccountController extends BaseController {
   @ResponseSchema(Account)
   public async auth (
     @HeaderParam('authorization') token: string
-  ) {
+  ): Promise<Object> {
     const user: any = await jwt.verify(token, 'koa-routing')
     return (<Object>user)
   }

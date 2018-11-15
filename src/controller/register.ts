@@ -11,7 +11,7 @@ export class Register {
   @ResponseSchema(Account)
   public async register (
     @Body({ required: true }) params: Account
-  ) {
+  ): Promise<Object> {
     const password: string = await bcrypt.hash(params.password, 10)
     const accountRepository: any = getManager().getRepository(Account)
     const newAccount: any = await accountRepository.create({
