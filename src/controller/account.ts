@@ -33,14 +33,14 @@ export class AccountController extends BaseController {
   @ResponseSchema(Account, {
     isArray: true
   })
-  async index () {
+  public async index () {
     return 'Hello World'
   }
 
   @Post('/login')
   @OpenAPI({ summary: '账号登录' })
   @ResponseSchema(Account)
-  async login (
+  public async login (
     @Body({ required: true }) params: LoginSchema
   ) {
     const user: any = await super.exists('Account', { username: params.username })
@@ -56,10 +56,10 @@ export class AccountController extends BaseController {
   @Get('/auth')
   @OpenAPI({ summary: 'auth' })
   @ResponseSchema(Account)
-  async auth (
+  public async auth (
     @HeaderParam('authorization') token: string
   ) {
     const user: any = await jwt.verify(token, 'koa-routing')
-    return user
+    return (<Object>user)
   }
 }

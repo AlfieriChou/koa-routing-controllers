@@ -6,7 +6,7 @@ export class BaseController {
     const optionsArr: string[] = options.split(',')
     let sortObj: any = {}
     optionsArr.map(item => {
-      let field = item.startsWith('-') || item.startsWith('+') ? item.substring(1) : item
+      let field: string = item.startsWith('-') || item.startsWith('+') ? item.substring(1) : item
       sortObj[field] = item.startsWith('-') ? 'desc' : 'asc'
     })
     return (<Object>sortObj)

@@ -12,7 +12,7 @@ export class DemoController extends BaseController {
   @ResponseSchema(Demo, {
     isArray: true
   })
-  async index(
+  public async index(
     @QueryParam('id') id: number,
     @QueryParam('title') title: string,
     @QueryParam('created_at_start') created_at_start: any,
@@ -46,7 +46,7 @@ export class DemoController extends BaseController {
   @Get('/demos/:id')
   @OpenAPI({ summary: '获取demo信息列表' })
   @ResponseSchema(Demo)
-  async show(
+  public async show(
     @Param('id') id: number
   ) {
     const demo: Object = await super.exists(Demo, { id: id })
@@ -56,7 +56,7 @@ export class DemoController extends BaseController {
   @Post('/demos')
   @OpenAPI({ summary: '创建demo信息' })
   @ResponseSchema(Demo)
-  async create(
+  public async create(
     @Body({ validate: true }) params: Demo
   ) {
     const demoRepository: any = getManager().getRepository(Demo)
@@ -70,24 +70,24 @@ export class DemoController extends BaseController {
 
   @Put('/demos/:id')
   @OpenAPI({ summary: '更新demo信息' })
-  async update(
+  public async update(
     @Param('id') id: number,
     @Body() demo: any
   ) {
     const demoRepository: any = getManager().createQueryBuilder(Demo, 'demo')
     await super.exists(Demo, { id: id })
     const result: any = await demoRepository.update(Demo).set((<Object>demo)).where('id = :id', { id: id }).execute()
-    return result
+    return (<Object>result)
   }
 
   @Delete('/demos/:id')
   @OpenAPI({ summary: '删除demo信息' })
-  async remove(
+  public async remove(
     @Param('id') id: number
   ) {
     const demoRepository: any = getManager().createQueryBuilder(Demo, 'demo')
     await super.exists(Demo, { id: id })
     const result: any = await demoRepository.delete().from(Demo).where('id = :id', { id: id }).execute()
-    return result
+    return (<Object>result)
   }
 }

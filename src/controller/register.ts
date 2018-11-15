@@ -9,7 +9,7 @@ export class Register {
   @Post('/register')
   @OpenAPI({ summary: '账号注册' })
   @ResponseSchema(Account)
-  async register (
+  public async register (
     @Body({ required: true }) params: Account
   ) {
     const password: string = await bcrypt.hash(params.password, 10)

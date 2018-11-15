@@ -32,7 +32,7 @@ const spec = routingControllersToSpec(storage, routingControllersOptions, {
 @Controller()
 export class SwaggerController {
   @Get('/swagger.json')
-  swagger () {
+  public swagger () {
     return spec
   }
 }
