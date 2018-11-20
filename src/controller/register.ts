@@ -3,15 +3,18 @@ import { OpenAPI, ResponseSchema } from 'routing-controllers-openapi'
 import { Account } from '../entity/account'
 import { getManager } from 'typeorm'
 import * as bcrypt from 'bcrypt'
+import { BaseController } from '../common/baseController'
 
 @Controller()
-export class Register {
+export class Register extends BaseController {
   @Post('/register')
   @OpenAPI({ summary: '账号注册' })
   @ResponseSchema(Account)
   public async register (
     @Body({ required: true }) params: Account
-  ): Promise<Object> {
+  ): Promise<any> {
+    const user: any = await super.exists(Account, { username: params.username })
+    if (user) throw new Error('该用户已注册')
     const password: string = await bcrypt.hash(params.password, 10)
     const accountRepository: any = getManager().getRepository(Account)
     const newAccount: any = await accountRepository.create({

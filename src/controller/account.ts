@@ -9,10 +9,10 @@ import * as jwt from 'jsonwebtoken'
 
 class LoginSchema {
   @IsString()
-  username: string
+  username!: string
 
   @Length(6, 30)
-  password: string
+  password!: string
 }
 
 @Controller()
