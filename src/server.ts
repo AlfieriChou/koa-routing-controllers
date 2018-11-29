@@ -8,6 +8,7 @@ import { Context } from 'koa'
 import * as views from 'koa-views'
 import * as path from 'path'
 import * as Router from 'koa-router'
+import { config } from './config'
 
 const routingControllersOptions = {
   controllers: [`${__dirname}/controller/*.ts`],
@@ -39,6 +40,6 @@ createConnection().then(async connection => {
   app.use(router.routes()).use(router.allowedMethods())
   const server = useKoaServer(app, routingControllersOptions)
 
-  server.listen(3000)
-  console.log('Koa server is running on port 3000.')
+  server.listen(config['port'])
+  console.log(`Koa server is running on port ${config['port']}.`)
 }).catch(error => console.log("TypeORM connection error: ", error))
