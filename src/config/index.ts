@@ -5,9 +5,10 @@ import * as _ from 'lodash'
 const env: string = process.env.NODE_ENV
 
 export let config: Object
-if (env === 'development' || '') {
+if (env === 'development' || '' || 'undefined') {
   config = development.config
 }
 if (env === 'production') {
   config = prod.config
 }
+config = _.merge(config, { env: env })
