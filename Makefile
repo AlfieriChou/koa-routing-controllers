@@ -1,23 +1,25 @@
-###############################
-env = $(shell date --iso=seconds)
+.PHONY: build clean tag rebuild start remove update
+#################################
+RUN = docker exec
+imageID = docker images 'koa-routing-controller' | uniq
 
 build:
 	@docker build -t koa-routing-controller .
 
 clean:
 	@echo "clean this docker image..."
-	@docker rmi $(docker images |grep 'koa-routing-controller')
+	@docker rmi --force $(imageID)
 
 tag:
 	@echo "tag this docker image..."
-	@docker tag $(docker images |grep 'koa-routing-controller') alfierichou/koa-routing-controller:$(env)
-	@docker push alfierichou/koa-routing-controller:$(env)
+	@docker tag $(imageID) alfierichou/koa-routing-controller
+	@docker push alfierichou/koa-routing-controller
 
 rebuild:
 	@make clean
 	@make build
 
-################################
+#################################
 start:
 	@docker run --name api-node-ts -d \
 		-p 3000:3000 \
