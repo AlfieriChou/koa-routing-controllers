@@ -9,13 +9,15 @@ import * as views from 'koa-views'
 import * as path from 'path'
 import * as Router from 'koa-router'
 import { config } from './config'
+import { databaseInitializer } from './database'
 
 const routingControllersOptions = {
   controllers: [`${__dirname}/controller/*.ts`],
   routePrefix: '/v1'
 }
 
-createConnection().then(async connection => {
+const bootstrap = async () => {
+  await databaseInitializer()
   const app = new Koa()
   const router = new Router()
   app.use(async (ctx: Context, next) => {
@@ -42,4 +44,6 @@ createConnection().then(async connection => {
 
   server.listen(config['port'])
   console.log(`Koa server is running on port ${config['port']}.`)
-}).catch(error => console.log("TypeORM connection error: ", error))
+}
+
+bootstrap()

@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/AlfieriChou/koa-routing-controllers#readme",
   "dependencies": {
+    "app-root-path": "^2.1.0",
     "bcrypt": "^3.0.2",
     "class-validator-jsonschema": "^1.2.0",
     "jsonwebtoken": "^8.3.0",
