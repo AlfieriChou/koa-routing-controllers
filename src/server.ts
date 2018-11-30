@@ -1,6 +1,5 @@
 import 'reflect-metadata'
 import { useKoaServer } from 'routing-controllers'
-import { createConnection } from 'typeorm'
 import * as Koa from 'koa'
 import * as logger from 'koa-logger'
 import * as BodyParser from 'koa-bodyparser'
@@ -10,6 +9,7 @@ import * as path from 'path'
 import * as Router from 'koa-router'
 import { config } from './config'
 import { databaseInitializer } from './database'
+import * as jwt from 'koa-jwt'
 
 const routingControllersOptions = {
   controllers: [`${__dirname}/controller/*.ts`],
@@ -35,6 +35,9 @@ const bootstrap = async () => {
   })
   app.use(BodyParser())
   app.use(logger())
+  app.use(jwt({ secret: 'koa-routing' }).unless({
+    path: [/\/login/, /\/register/]
+  }))
   app.use(views(path.join('./views'), {map: {html: 'nunjucks'}}))
   router.get('/v1/apidoc', async (ctx) => {
     await ctx.render('index.html', { url: '/v1/swagger.json' })

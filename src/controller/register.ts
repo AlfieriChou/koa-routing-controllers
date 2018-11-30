@@ -13,10 +13,10 @@ export class Register extends BaseController {
   public async register (
     @Body({ required: true }) params: Account
   ): Promise<any> {
-    const user: any = await super.exists(Account, { username: params.username })
-    if (user) throw new Error('该用户已注册')
+    const accountRepository = getManager().getRepository(Account)
+    const exists: any = await accountRepository.findOne({ username: params.username })
+    if (exists) throw new Error('该用户名已使用')
     const password: string = await bcrypt.hash(params.password, 10)
-    const accountRepository: any = getManager().getRepository(Account)
     const newAccount: any = await accountRepository.create({
       username: params.username,
       password: password
