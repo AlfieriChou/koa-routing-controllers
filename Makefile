@@ -2,6 +2,8 @@
 #################################
 RUN = docker exec
 imageID = docker images 'koa-routing-controller' | uniq
+time = $(shell date +"%Y-%M-%d-%H-%M-%S")
+image = "alfierichou/koa-routing-controller"
 
 build:
 	@docker build -t koa-routing-controller .
@@ -12,8 +14,8 @@ clean:
 
 tag:
 	@echo "tag this docker image..."
-	@docker tag $(imageID) alfierichou/koa-routing-controller
-	@docker push alfierichou/koa-routing-controller
+	@docker tag $(image) $(image):$(time)
+	@docker push $(image):$(time)
 
 rebuild:
 	@make clean

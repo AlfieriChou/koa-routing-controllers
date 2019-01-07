@@ -36,7 +36,7 @@ const bootstrap = async () => {
   app.use(BodyParser())
   app.use(logger())
   app.use(jwt({ secret: 'koa-routing' }).unless({
-    path: [/\/login/, /\/register/]
+    path: [/\/login/, /\/register/, /\/apidoc/, /\/swagger.json/]
   }))
   app.use(views(path.join('./views'), {map: {html: 'nunjucks'}}))
   router.get('/v1/apidoc', async (ctx) => {
